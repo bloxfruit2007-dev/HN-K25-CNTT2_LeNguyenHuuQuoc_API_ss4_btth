@@ -34,30 +34,36 @@ def search_the_course(
     mode:str = "",
     category: str = ""
 ):
-    result = []
+    result=[]
     if not mode and not category:
-        result =  courses
-    if mode and category:
-        result =  [course for course in courses if course["category"] == category and course["mode"] == mode]
-    if mode:
-        result =  [course for course in courses if course["mode"] == mode]
-    if category:
-        result =  [course for course in courses if course["category"] == category]
-    
-    if not result:
-        return {
-            "detail": "Không có khóa học phù hợp"
+        result = courses
+    elif mode and category:
+        for course in courses:
+            if course ["mode"] == mode and course["category"] == category:
+                result.append(course)
+    elif mode:
+        for course in courses:
+            if course["mode"]== mode:
+                result.append(course)
+    elif category:
+        for course in courses:
+            if course["category"] == category:
+                result.append(course)
+    if len(result)==0:
+        return{
+            "detail":"khong co khoa hoc phu hop"
         }
-    return {
-        "Danh sách khóa học": result
+    return{
+        "danh sach khoa hoc":result
     }
-
 @app.get("/courses/{course_id}")
-def get_student(course_id:int):
-    if not any(course["id"] == course_id for course in courses):
-        return {
-            "detail": "Không tìm thấy khóa học"
-        }
+def get_course(course_id: int):
+    for course in courses:
+        if course["id"]== course_id:
+            return{
+                "mon hoc chi tiet": course
+            }
+        
     return {
-        "Môn hoch chi tiết":courses[course_id]
+        "detail":"khong tim thay khoa hoc"
     }
